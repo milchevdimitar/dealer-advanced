@@ -1,0 +1,32 @@
+Inventory at 25.04.2022 - 23:00:04
+Item: productone
+Amount: 10
+Item: productsecond
+Amount: 15
+Item: producttree
+Amount: 18
+--------------------------------------------------------------
+Inventory at 25.04.2022 - 23:00:04
+Item: productone
+Amount: 10
+Item: productsecond
+Amount: 15
+Item: producttree
+Amount: 18
+--------------------------------------------------------------
+Inventory at 25.04.2022 - 23:00:04
+Item: productone
+Amount: 10
+Item: productsecond
+Amount: 15
+Item: producttree
+Amount: 18
+--------------------------------------------------------------
+Inventory at 25.04.2022 - 23:00:30
+Item: product1
+Amount: 10
+Item: product2
+Amount: 15
+Item: product3
+Amount: 18
+--------------------------------------------------------------
