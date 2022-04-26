@@ -97,7 +97,7 @@ void read_from_log_file(FILE * log_file){
     fclose(log_file);
 }
 
-int write_in_file(FILE * log_file, int tm_year, int tm_mon, int tm_mday,int tm_hour, int tm_min, int tm_sec){
+void write_in_file(FILE * log_file, int tm_year, int tm_mon, int tm_mday,int tm_hour, int tm_min, int tm_sec){
     log_file = fopen(ODIT, "a");
 
     fprintf(log_file,"Inventory at %02d.%02d.%02d - %02d:%02d:%02d\n", tm_mday, tm_mon, tm_year, tm_hour, tm_min,tm_sec);
@@ -123,7 +123,7 @@ void test(){
     }
 }
 
-int main(){
+int main(void){
     get_inventory_string();
     get_inventory_int();
 
@@ -159,6 +159,4 @@ int main(){
             break;
         }
     }
-
-    return 0;
 }
