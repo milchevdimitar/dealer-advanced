@@ -30,3 +30,19 @@ Amount: 15
 Item: product3
 Amount: 18
 --------------------------------------------------------------
+Inventory at 26.04.2022 - 08:57:49
+Item: product1
+Amount: 10
+Item: product2
+Amount: 15
+Item: product3
+Amount: 18
+--------------------------------------------------------------
+Inventory at 26.04.2022 - 09:13:16
+Item: product1
+Amount: 10
+Item: product2
+Amount: 15
+Item: product3
+Amount: 18
+--------------------------------------------------------------
