@@ -1,0 +1,27 @@
+ 0, 0, 0, 0, 0 | Количество
+---------------|-------------
+ m, v, c,ci, va| Продукт
+
+Легенда:
+m - money
+
+v - vodka
+
+c - condoms
+
+ci - cigarets
+
+va - vapes
+
+void print_inventory_string(){
+    int n = 10;
+    get_inventory_string();
+    get_inventory_int();
+    for (int i = 0; i<n; i++){
+        if(inventory_names_array[i][i] == '\0'){
+            break;
+        }
+        else{
+            printf("Available stock from %s: %d\n",inventory_names_array[i], inventory_amount_array[i]);        }
+        }
+}
