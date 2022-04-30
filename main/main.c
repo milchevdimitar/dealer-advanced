@@ -153,6 +153,7 @@ void print_the_linked_list(LinkedList *ll){
 }
 
 void print_avail_opt_main_menu(){
+    printf("\n");
     printf("1) Read from the log file\n");
     printf("2) Save the current inventory in the log file\n");
     printf("3) Print current inventory and item amounts\n");
@@ -338,8 +339,7 @@ void save_adress(FILE * adress_book_file){
 void work_with_adress_book(LinkedList *ll){
     clearing_space_for_LinkedList(ll);
     int op = 0;
-    int elements_count = 0;
-    
+
     FILE * adress_book_file;
 
     bool looping = true;
@@ -349,14 +349,25 @@ void work_with_adress_book(LinkedList *ll){
         printf("Enter op:");
         scanf("%d", &op);
         switch(op){
-            case 1: get_adress_string();
-                    printf("%d", elements_count);
-                    if((strlen(ADRESS_BOOK_ARRAY[elements_count])) != 0){
-                        add_element_at_the_end(ll, elements_count);
-                        elements_count++;
-                    }else{
-                        printf("You dont have so much adresses in the file\n");
+            case 1: int curr_count = 0;
+                    int count = 0;
+                    int old_count = 0;
+                    int added_count = 0;
+                    for(int i = 0; (strlen(ADRESS_BOOK_ARRAY[i])) != 0; i++){
+                        old_count++;
                     }
+                    printf("Old count %d\n", old_count);
+                    get_adress_string();
+                    for(int i = 0; (strlen(ADRESS_BOOK_ARRAY[i])) != 0; i++){
+                        add_element_at_the_end(ll, i);
+                        curr_count++;
+                    }
+                    for(int i = 0; (strlen(ADRESS_BOOK_ARRAY[i])) != 0; i++){
+                        count++;
+                    }
+                    added_count = count - old_count;
+                    printf("%d elements were added to the list successfuly\n", added_count);
+                    printf("Now you have %d\n", count);
                 break;
             case 2: print_the_linked_list(ll);
                 break;
@@ -378,7 +389,6 @@ void work_with_adress_book(LinkedList *ll){
 void main(){
     get_inventory_string();
     get_inventory_int();
-    get_adress_string();
     get_clients_string();
 
     time_t T = time(NULL);
