@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include <errno.h>
 #include <math.h>
 #include <time.h>
 #include <assert.h>
@@ -293,13 +294,18 @@ void read_from_log_file(FILE * log_file){
     fclose(log_file);
 }
 
-void write_in_the_log_file(FILE * log_file, int tm_year, int tm_mon, int tm_mday,int tm_hour, int tm_min, int tm_sec){
+void write_in_the_log_file(int tm_year, int tm_mon, int tm_mday, int tm_hour, int tm_min, int tm_sec){
+    FILE *log_file = calloc(2,sizeof(FILE));
     log_file = fopen(ODIT, "a");
-
-    fprintf(log_file,"Inventory at %02d.%02d.%02d - %02d:%02d:%02d\n", tm_mday, tm_mon, tm_year, tm_hour, tm_min,tm_sec);
-    f_print_inventory(log_file);
-    fprintf(log_file,"--------------------------------------------------------------\n");
-    fclose(log_file);
+    if (log_file == NULL) {
+        fprintf(stderr, "error opening log file %s: %s\n",
+                ODIT, strerror(errno));
+    } else {
+        fprintf(log_file, "Inventory at %02d.%02d.%02d - %02d:%02d:%02d\n", tm_mday, tm_mon, tm_year, tm_hour, tm_min, tm_sec);
+        f_print_inventory(log_file);
+        fprintf(log_file, "--------------------------------------------------------------\n");
+        fclose(log_file);
+    }
 }
 
 void save_inventory(FILE * inventory){
@@ -321,10 +327,10 @@ void test(){
 
 //Working with the adress book
 void print_avail_opt_adress_book(){
-    printf("1) Add new adress from file\n");
+    printf("1) Add the adresses from file\n");
     printf("2) Print your adress book\n");
     printf("3) Save current adress\n");
-    printf("4) Edit the adresses\n");
+    printf("4) Add new adress\n");
     printf("5) Exit\n");
 }
 
@@ -335,6 +341,17 @@ void save_adress(FILE * adress_book_file){
     }
     fclose(adress_book_file);
 }
+
+void add_adress(LinkedList *ll){
+    int i = 0;
+    for(; (strlen(ADRESS_BOOK_ARRAY[i])) != 0; i++){
+    }
+    add_element_at_the_end(ll, i);
+    printf("Enter the new adress:");
+    scanf("%s", &ADRESS_BOOK_ARRAY[i]);
+}
+
+void date_time_meet(){}
 
 void work_with_adress_book(LinkedList *ll){
     clearing_space_for_LinkedList(ll);
@@ -348,11 +365,13 @@ void work_with_adress_book(LinkedList *ll){
 
         printf("Enter op:");
         scanf("%d", &op);
+            
         switch(op){
             case 1: int curr_count = 0;
                     int count = 0;
                     int old_count = 0;
-                    int added_count = 0;
+                    int added_count = 0;curr_count = 0;
+
                     for(int i = 0; (strlen(ADRESS_BOOK_ARRAY[i])) != 0; i++){
                         old_count++;
                     }
@@ -373,7 +392,11 @@ void work_with_adress_book(LinkedList *ll){
                 break;
             case 3: save_adress(adress_book_file);
                 break;
-            case 4: 
+            case 4: add_adress(ll);
+                    printf("Auto save is set to %d\n", auto_save);
+                    if(auto_save == true){
+                        save_adress(adress_book_file);
+                    }
                 break;
             case 5: printf("Auto save is set to %d\n", auto_save);
                     if(auto_save == true){
@@ -411,7 +434,6 @@ void main(){
             case 1: read_from_log_file(log_file);
                 break;
             case 2: write_in_the_log_file(
-                        log_file, 
                         tm.tm_year + 1900, 
                         tm.tm_mon + 1, 
                         tm.tm_mday, 
