@@ -28,9 +28,6 @@ static char INVENTORY_NAMES_ARRAY[MAX_SIZE][MAX_SIZE];
 static char ADRESS_BOOK_ARRAY[MAX_SIZE][MAX_SIZE];
 static char CLIENTS_BOOK_ARRAY[MAX_SIZE][MAX_SIZE];
 
-//Defining alias
-//#define ALIAS_SAVE_ODIT ""
-
 //Linked List things and functions for "Adress book"
 typedef struct node_t{
     int value;
@@ -161,7 +158,8 @@ void print_avail_opt_main_menu(){
     printf("4) Save\n");
     printf("5) Test\n");
     printf("6) Work with your adress book\n");
-    printf("7) Exit\n");
+    printf("7) Work with your clients book\n");
+    printf("8) Exit\n");
 }
 
 //File things and functions
@@ -312,7 +310,6 @@ void save_inventory(FILE * inventory){
     inventory = fopen(INVENTORY_A, "w");
     for(int i = 0; INVENTORY_AMOUNT_ARRAY[i] != '\0'; i++){
         fprintf(inventory, "%d,", INVENTORY_AMOUNT_ARRAY[i]);
-        printf("%d", i);
     }
     fclose(inventory);
 }   
@@ -351,7 +348,16 @@ void add_adress(LinkedList *ll){
     scanf("%s", &ADRESS_BOOK_ARRAY[i]);
 }
 
-void date_time_meet(){}
+// void remaining_time(int tm_mday, int tm_hour, int tm_min, int tm_sec){
+//     int g_mday = 0;
+//     int g_mhour = 0;
+//     int g_min = 0;
+//     int g_msec = 0;
+//     scanf("%d:%d:%d:%d" , &g_mday,&g_mhour,&g_min,&g_msec);    
+//     for(;g_mhour >= 24;g_mday++){
+//         for(;)
+//     }
+// }
 
 void work_with_adress_book(LinkedList *ll){
     clearing_space_for_LinkedList(ll);
@@ -408,6 +414,68 @@ void work_with_adress_book(LinkedList *ll){
     }
 }
 
+void print_avail_opt_clients_book(){
+    printf("1) Add the clients from file\n");
+    printf("2) Print your clients book\n");
+    printf("3) Save current clients\n");
+    printf("4) Add new client\n");
+    printf("5) Exit\n");
+}
+
+void work_with_clients_book(LinkedList *ll){
+    clearing_space_for_LinkedList(ll);
+    int op = 0;
+
+    FILE * clients_book_file;
+
+    bool looping = true;
+    while(looping == true){
+        print_avail_opt_clients_book();
+        printf("Enter op:");
+        scanf("%d", &op);
+            
+        switch(op){
+            case 1: int curr_count = 0;
+                    int count = 0;
+                    int old_count = 0;
+                    int added_count = 0;curr_count = 0;
+
+                    for(int i = 0; (strlen(CLIENTS_BOOK_ARRAY[i])) != 0; i++){
+                        old_count++;
+                    }
+                    printf("Old count %d\n", old_count);
+                    get_clients_string();
+                    for(int i = 0; (strlen(CLIENTS_BOOK_ARRAY[i])) != 0; i++){
+                        add_element_at_the_end(ll, i);
+                        curr_count++;
+                    }
+                    for(int i = 0; (strlen(CLIENTS_BOOK_ARRAY[i])) != 0; i++){
+                        count++;
+                    }
+                    added_count = count - old_count;
+                    printf("%d elements were added to the list successfuly\n", added_count);
+                    printf("Now you have %d\n", count);
+                break;
+            case 2: print_the_linked_list(ll);
+                break;
+            case 3: save_adress(clients_book_file);
+                break;
+            case 4: add_adress(ll);
+                    printf("Auto save is set to %d\n", auto_save);
+                    if(auto_save == true){
+                        save_adress(clients_book_file);
+                    }
+                break;
+            case 5: printf("Auto save is set to %d\n", auto_save);
+                    if(auto_save == true){
+                        save_adress(clients_book_file);
+                    }
+                    looping = false;
+                break;
+            }
+    }
+}
+
 //Main
 void main(){
     get_inventory_string();
@@ -417,7 +485,8 @@ void main(){
     time_t T = time(NULL);
     struct tm tm = *localtime(&T);
 
-    adress_book = calloc(1,sizeof(adress_book));
+    adress_book = calloc(2,sizeof(adress_book));
+    clients_book = calloc(2,sizeof(clients_book));
 
     FILE * inventory_a;
     FILE * inventory_n;
@@ -449,8 +518,10 @@ void main(){
             case 5: test();
                 break;
             case 6: work_with_adress_book(adress_book);
-                break; 
-            case 7: printf("Auto save is set to %d\n", auto_save);
+                break;
+            case 7: work_with_clients_book(clients_book);
+                break;
+            case 8: printf("Auto save is set to %d\n", auto_save);
                     if(auto_save == true){
                         save_inventory(inventory_a);
                     }

@@ -138,3 +138,10 @@ Item: product2
 Amount: 1957747793
 Item: product3
 Amount: 424238335
+Inventory at 01.05.2022 - 20:56:39
+Item: product1
+Amount: 1714636915
+Item: product2
+Amount: 1957747793
+Item: product3
+Amount: 424238335
