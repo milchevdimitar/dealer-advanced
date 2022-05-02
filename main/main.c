@@ -19,9 +19,11 @@
 
 //Defining settings
 #define AUTO_SAVE 1
-bool auto_save = AUTO_SAVE;
 #define AUTO_ODIT 0
+#define SECURE_INSERT 1;
+bool auto_save = AUTO_SAVE;
 bool auto_odit = AUTO_ODIT;
+bool secure_insert = SECURE_INSERT;
 
 //Global arrays
 static int INVENTORY_AMOUNT_ARRAY[MAX_SIZE_OF_ARRAYS];
@@ -171,19 +173,16 @@ void get_inventory_int(){
 }
 
 void get_inventory_string(){
-    int i,n;
     char *token;
     char help[256];
     FILE *InputFile;
     InputFile = fopen(INVENTORY_N, "r");
-    fscanf(InputFile, "%255s", help);
+    fscanf(InputFile, "%s", help);
     token = strtok(help, ",");
-    while(token != NULL){
+    for(int i = 0;token != NULL;i++){
         strncpy(INVENTORY_NAMES_ARRAY[i], token, MAX_SIZE_OF_ARRAYS);
         token = strtok(NULL, ",");
-        i++;
     }
-    n = i;
     fclose(InputFile);
 }
 
@@ -226,26 +225,24 @@ void get_clients_string(){
 }
 
 void print_inventory(){
-    for (int i = 0; i<MAX_SIZE_OF_ARRAYS; i++){
-        if(INVENTORY_NAMES_ARRAY[i][i] == '\0'){
+    int n = MAX_SIZE_OF_ARRAYS;
+    for (int i = 0; i<n; i++){
+        if((strlen(INVENTORY_NAMES_ARRAY[i])) == 0){
+            printf("Element %d is NULL. Breaking ...", i+1);
             break;
         }
         else{
-            printf("Available stock from %s: %d\n",INVENTORY_NAMES_ARRAY[i], INVENTORY_AMOUNT_ARRAY[i]);        
+            printf("%s: %d\n",INVENTORY_NAMES_ARRAY[i], INVENTORY_AMOUNT_ARRAY[i]);
         }
     }
 }
 
 void print_avail_opt_main_menu(){
     printf("\n");
-    printf("1) Read from the log file\n");
-    printf("2) Save the current inventory in the log file\n");
-    printf("3) Print current inventory and item amounts\n");
-    printf("4) Save\n");
-    printf("5) Test\n");
-    printf("6) Work with your adress book\n");
-    printf("7) Work with your clients book\n");
-    printf("8) Exit\n");
+    printf("1) Work with your inventory\n");
+    printf("2) Work with your adress book\n");
+    printf("3) Work with your clients book\n");
+    printf("4) Exit\n");
 }
 
 void print_avail_adress(){
@@ -304,6 +301,7 @@ void write_in_the_log_file(int tm_year, int tm_mon, int tm_mday, int tm_hour, in
         f_print_inventory(log_file);
         fprintf(log_file, "--------------------------------------------------------------\n");
     }
+    fclose(log_file);
 }
 
 void save_inventory(FILE * inventory){
@@ -324,7 +322,7 @@ void test(){
 
 //Working with the adress book
 void print_avail_opt_adress_book(){
-    printf("1) Add the adresses from file\n");
+    printf("1) Add the adresses from file(Can be done only once)\n");
     printf("2) Print your adress book\n");
     printf("3) Save current adress\n");
     printf("4) Add new adress\n");
@@ -362,27 +360,27 @@ void add_from_file(LinkedList *ll, char DATA_ARRAY[MAX_SIZE_OF_ARRAYS][MAX_SIZE_
     int curr_count = 0;
     int count = 0;
     int old_count = 0;
-    int added_count = 0;curr_count = 0;
+    int added_count = 0;
 
     for(int i = 0; (strlen(DATA_ARRAY[i])) != 0; i++){
         old_count++;
     }
     printf("Old count %d\n", old_count);
-    get_clients_string();
     for(int i = 0; (strlen(DATA_ARRAY[i])) != 0; i++){
         add_element_at_the_end(ll, i);
         curr_count++;
     }
     for(int i = 0; (strlen(DATA_ARRAY[i])) != 0; i++){
-        count++;
+        count += 2;
     }
     added_count = count - old_count;
     printf("%d elements were added to the list successfuly\n", added_count);
+    count /= 2;
     printf("Now you have %d\n", count);
 }
 
 void print_avail_opt_clients_book(){
-    printf("1) Add the clients from file\n");
+    printf("1) Add the clients from file(Can be done only once)\n");
     printf("2) Print your clients book\n");
     printf("3) Save current clients\n");
     printf("4) Add new client\n");
@@ -395,6 +393,8 @@ void work_with_clients_book(LinkedList *ll){
 
     FILE * clients_book_file;
 
+    int firstcaseexec = 0;
+
     bool looping = true;
     while(looping == true){
         print_avail_opt_clients_book();
@@ -402,7 +402,17 @@ void work_with_clients_book(LinkedList *ll){
         scanf("%d", &op);
             
         switch(op){
-            case 1: add_from_file(ll, CLIENTS_BOOK_ARRAY);
+            case 1: if(firstcaseexec == 0){
+                        get_clients_string();
+                        add_from_file(ll, CLIENTS_BOOK_ARRAY);
+                        firstcaseexec++;
+                    }else if(secure_insert == false){
+                        get_clients_string();
+                        add_from_file(ll, CLIENTS_BOOK_ARRAY);
+                    }else{ 
+                        printf("You already done it once\n");
+                        printf("Secure insert is set to %d\n", secure_insert);
+                    }
                 break;
             case 2: print_the_linked_list(ll, CLIENTS_BOOK_ARRAY);
                 break;
@@ -430,6 +440,8 @@ void work_with_adress_book(LinkedList *ll){
 
     FILE * adress_book_file;
 
+    int firstcaseexec = 0;
+
     bool looping = true;
     while(looping == true){
         print_avail_opt_adress_book();
@@ -438,7 +450,17 @@ void work_with_adress_book(LinkedList *ll){
         scanf("%d", &op);
             
         switch(op){
-            case 1: add_from_file(ll, ADRESS_BOOK_ARRAY);
+            case 1: if(firstcaseexec == 0){
+                        get_adress_string();
+                        add_from_file(ll, ADRESS_BOOK_ARRAY);
+                        firstcaseexec++;
+                    }else if(secure_insert == false){
+                        get_adress_string();
+                        add_from_file(ll, ADRESS_BOOK_ARRAY);
+                    }else{ 
+                        printf("You already done it once\n");
+                        printf("Secure insert is set to %d\n", secure_insert);
+                    }
                 break;
             case 2: print_the_linked_list(ll, ADRESS_BOOK_ARRAY);
                 break;
@@ -460,24 +482,31 @@ void work_with_adress_book(LinkedList *ll){
     }
 }
 
-//Main
-void main(){
+void print_avail_opt_inventory(){
+    printf("\n");
+    printf("1) Read the inventory log file\n");
+    printf("2) Save the current inventory in the log file\n");
+    printf("3) Print the current inventory on the screen\n");
+    printf("4) Save\n");
+    printf("5) Test\n");
+    printf("6) Exit\n");
+}
+
+void work_with_inventory(){
     get_inventory_int();
-    get_inventory_string();
-    time_t T = time(NULL);
-    struct tm tm = *localtime(&T);
-
-    adress_book = calloc(2,sizeof(adress_book));
-    clients_book = calloc(2,sizeof(clients_book));
-
+    get_inventory_string();       
+                    
     FILE * inventory_a = calloc(2,sizeof(FILE));
     FILE * inventory_n = calloc(2,sizeof(FILE));
     FILE * log_file = calloc(2,sizeof(FILE));
-    
+
+    time_t T = time(NULL);
+    struct tm tm = *localtime(&T);
+
     bool looping = true;
     while (looping == true){
 
-        print_avail_opt_main_menu();
+        print_avail_opt_inventory();
         printf("Enter op:");
         int op = 0;scanf("%d", &op);
         switch (op){
@@ -491,24 +520,38 @@ void main(){
                         tm.tm_min, 
                         tm.tm_sec
                     );
-                    FILE * inventory_temp = fopen(INVENTORY_A, "r");
-                    fclose(inventory_temp);
-                break;
+                break;    
             case 3: print_inventory();
                 break;
             case 4: save_inventory(inventory_a);
                 break;
             case 5: test();
                 break;
-            case 6: work_with_adress_book(adress_book);
+            case 6: looping = false;
                 break;
-            case 7: work_with_clients_book(clients_book);
+        }
+    }
+}
+
+//Main
+void main(){
+    adress_book = calloc(2,sizeof(adress_book));
+    clients_book = calloc(2,sizeof(clients_book));
+    
+    bool looping = true;
+    while (looping == true){
+
+        print_avail_opt_main_menu();
+        printf("Enter op:");
+        int op = 0;scanf("%d", &op);
+        switch (op){
+            case 1: work_with_inventory();
                 break;
-            case 8: printf("Auto save is set to %d\n", auto_save);
-                    if(auto_save == true){
-                        save_inventory(inventory_a);
-                    }
-                    looping = false;
+            case 2: work_with_adress_book(adress_book);
+                break;
+            case 3: work_with_clients_book(clients_book);
+                break;
+            case 4: looping = false;
                 break;
             default: printf("Not correct option\n");
                 break;
