@@ -7,26 +7,27 @@
 #include <time.h>
 #include <assert.h>
 
-#define MAX_SIZE 100
+#define MAX_SIZE_OF_ARRAYS 100
+#define MAX_SIZE_OF_PATH_TO_FILES 25
 
 //Defining file names
-#define ODIT "odit/log_file.txt"
-#define INVENTORY_N "base/inventory_names.txt"
-#define INVENTORY_A "base/inventory_amount.txt"
-#define ADRESS_BOOK "external/adress_book.txt"
+#define ODIT         "odit/log_file.txt"
+#define INVENTORY_N  "base/inventory_names.txt"
+#define INVENTORY_A  "base/inventory_amount.txt"
+#define ADRESS_BOOK  "external/adress_book.txt"
 #define CLIENTS_BOOK "external/clients_book.txt"
 
 //Defining settings
 #define AUTO_SAVE 1
 bool auto_save = AUTO_SAVE;
-#define AUTO_ODIT 1
+#define AUTO_ODIT 0
 bool auto_odit = AUTO_ODIT;
 
 //Global arrays
-static int INVENTORY_AMOUNT_ARRAY[MAX_SIZE];
-static char INVENTORY_NAMES_ARRAY[MAX_SIZE][MAX_SIZE];
-static char ADRESS_BOOK_ARRAY[MAX_SIZE][MAX_SIZE];
-static char CLIENTS_BOOK_ARRAY[MAX_SIZE][MAX_SIZE];
+static int INVENTORY_AMOUNT_ARRAY[MAX_SIZE_OF_ARRAYS];
+static char INVENTORY_NAMES_ARRAY[MAX_SIZE_OF_ARRAYS][MAX_SIZE_OF_ARRAYS];
+static char ADRESS_BOOK_ARRAY[MAX_SIZE_OF_ARRAYS][MAX_SIZE_OF_ARRAYS];
+static char CLIENTS_BOOK_ARRAY[MAX_SIZE_OF_ARRAYS][MAX_SIZE_OF_ARRAYS];
 
 //Linked List things and functions for "Adress book"
 typedef struct node_t{
@@ -140,11 +141,11 @@ int add_element_on_another_spot(LinkedList *ll, int new_val){
     iterator->prev = new_node;
 }
 
-void print_the_linked_list(LinkedList *ll){
+void print_the_linked_list(LinkedList *ll, char DATA_ARRAY[MAX_SIZE_OF_ARRAYS][MAX_SIZE_OF_ARRAYS]){
     Node *curr = ll->head;
 
     while (curr) {
-        printf("%s ", ADRESS_BOOK_ARRAY[curr->value]);
+        printf("%s ", DATA_ARRAY[curr->value]);
         curr = curr->next;
     }
     printf("\n");
@@ -190,7 +191,7 @@ void get_inventory_string(){
     fscanf(InputFile, "%s", help);
     token = strtok(help, ",");
     while(token != NULL){
-        strncpy(INVENTORY_NAMES_ARRAY[i], token, MAX_SIZE);
+        strncpy(INVENTORY_NAMES_ARRAY[i], token, MAX_SIZE_OF_ARRAYS);
         token = strtok(NULL, ",");
         i++;
     }
@@ -208,7 +209,7 @@ void get_adress_string(){
     fscanf(InputFile, "%s", help);
     token = strtok(help, ",");
     while(token != NULL){
-        strncpy(ADRESS_BOOK_ARRAY[i], token, MAX_SIZE);
+        strncpy(ADRESS_BOOK_ARRAY[i], token, MAX_SIZE_OF_ARRAYS);
         token = strtok(NULL, ",");
         i++;
     }
@@ -227,7 +228,7 @@ void get_clients_string(){
     fscanf(InputFile, "%s", help);
     token = strtok(help, ",");
     while(token != NULL){
-        strncpy(CLIENTS_BOOK_ARRAY[i], token, MAX_SIZE);
+        strncpy(CLIENTS_BOOK_ARRAY[i], token, MAX_SIZE_OF_ARRAYS);
         token = strtok(NULL, ",");
         i++;
     }
@@ -237,7 +238,7 @@ void get_clients_string(){
 }
 
 void print_inventory(){
-    for (int i = 0; i<MAX_SIZE; i++){
+    for (int i = 0; i<MAX_SIZE_OF_ARRAYS; i++){
         if(INVENTORY_NAMES_ARRAY[i][i] == '\0'){
             break;
         }
@@ -248,7 +249,7 @@ void print_inventory(){
 }
 
 void print_avail_adress(){
-    for (int i = 0; i<MAX_SIZE; i++){
+    for (int i = 0; i<MAX_SIZE_OF_ARRAYS; i++){
         if(ADRESS_BOOK_ARRAY[i][i] != '\0'){
             printf("Adress %d: %s\n", i+1, ADRESS_BOOK_ARRAY[i]); 
         }
@@ -259,7 +260,7 @@ void print_avail_adress(){
 }
 
 void f_print_inventory(FILE * log_file){
-    int n = MAX_SIZE;
+    int n = MAX_SIZE_OF_ARRAYS;
     for (int i = 0; i<n; i++){
         if(INVENTORY_AMOUNT_ARRAY[i] == '\0'){
             break;
@@ -331,21 +332,20 @@ void print_avail_opt_adress_book(){
     printf("5) Exit\n");
 }
 
-void save_adress(FILE * adress_book_file){
-    adress_book_file = fopen(ADRESS_BOOK, "w");
-    for(int i = 0; (strlen(ADRESS_BOOK_ARRAY[i])) != 0; i++){
-        fprintf(adress_book_file, "%s,", ADRESS_BOOK_ARRAY[i]);
+void save_ll(FILE * book_file, char DATA_ARRAY[MAX_SIZE_OF_ARRAYS][MAX_SIZE_OF_ARRAYS], char file_path[MAX_SIZE_OF_PATH_TO_FILES]){
+    book_file = fopen(file_path, "w");
+    for(int i = 0; (strlen(DATA_ARRAY[i])) != 0; i++){
+        fprintf(book_file, "%s,", DATA_ARRAY[i]);
     }
-    fclose(adress_book_file);
+    fclose(book_file);
 }
 
-void add_adress(LinkedList *ll){
+void add_something_new(LinkedList *ll, char DATA_ARRAY[MAX_SIZE_OF_ARRAYS][MAX_SIZE_OF_ARRAYS]){
     int i = 0;
-    for(; (strlen(ADRESS_BOOK_ARRAY[i])) != 0; i++){
-    }
+    for(;(strlen(DATA_ARRAY[i])) != 0; i++){}
     add_element_at_the_end(ll, i);
-    printf("Enter the new adress:");
-    scanf("%s", &ADRESS_BOOK_ARRAY[i]);
+    printf("Enter the new adress or client:");
+    scanf("%s", &DATA_ARRAY[i]);
 }
 
 // void remaining_time(int tm_mday, int tm_hour, int tm_min, int tm_sec){
@@ -359,59 +359,27 @@ void add_adress(LinkedList *ll){
 //     }
 // }
 
-void work_with_adress_book(LinkedList *ll){
-    clearing_space_for_LinkedList(ll);
-    int op = 0;
+void add_from_file(LinkedList *ll, char DATA_ARRAY[MAX_SIZE_OF_ARRAYS][MAX_SIZE_OF_ARRAYS]){
+    int curr_count = 0;
+    int count = 0;
+    int old_count = 0;
+    int added_count = 0;curr_count = 0;
 
-    FILE * adress_book_file;
-
-    bool looping = true;
-    while(looping == true){
-        print_avail_opt_adress_book();
-
-        printf("Enter op:");
-        scanf("%d", &op);
-            
-        switch(op){
-            case 1: int curr_count = 0;
-                    int count = 0;
-                    int old_count = 0;
-                    int added_count = 0;curr_count = 0;
-
-                    for(int i = 0; (strlen(ADRESS_BOOK_ARRAY[i])) != 0; i++){
-                        old_count++;
-                    }
-                    printf("Old count %d\n", old_count);
-                    get_adress_string();
-                    for(int i = 0; (strlen(ADRESS_BOOK_ARRAY[i])) != 0; i++){
-                        add_element_at_the_end(ll, i);
-                        curr_count++;
-                    }
-                    for(int i = 0; (strlen(ADRESS_BOOK_ARRAY[i])) != 0; i++){
-                        count++;
-                    }
-                    added_count = count - old_count;
-                    printf("%d elements were added to the list successfuly\n", added_count);
-                    printf("Now you have %d\n", count);
-                break;
-            case 2: print_the_linked_list(ll);
-                break;
-            case 3: save_adress(adress_book_file);
-                break;
-            case 4: add_adress(ll);
-                    printf("Auto save is set to %d\n", auto_save);
-                    if(auto_save == true){
-                        save_adress(adress_book_file);
-                    }
-                break;
-            case 5: printf("Auto save is set to %d\n", auto_save);
-                    if(auto_save == true){
-                        save_adress(adress_book_file);
-                    }
-                    looping = false;
-                break;
-            }
+    for(int i = 0; (strlen(DATA_ARRAY[i])) != 0; i++){
+        old_count++;
     }
+    printf("Old count %d\n", old_count);
+    get_clients_string();
+    for(int i = 0; (strlen(DATA_ARRAY[i])) != 0; i++){
+        add_element_at_the_end(ll, i);
+        curr_count++;
+    }
+    for(int i = 0; (strlen(DATA_ARRAY[i])) != 0; i++){
+        count++;
+    }
+    added_count = count - old_count;
+    printf("%d elements were added to the list successfuly\n", added_count);
+    printf("Now you have %d\n", count);
 }
 
 void print_avail_opt_clients_book(){
@@ -435,40 +403,57 @@ void work_with_clients_book(LinkedList *ll){
         scanf("%d", &op);
             
         switch(op){
-            case 1: int curr_count = 0;
-                    int count = 0;
-                    int old_count = 0;
-                    int added_count = 0;curr_count = 0;
-
-                    for(int i = 0; (strlen(CLIENTS_BOOK_ARRAY[i])) != 0; i++){
-                        old_count++;
-                    }
-                    printf("Old count %d\n", old_count);
-                    get_clients_string();
-                    for(int i = 0; (strlen(CLIENTS_BOOK_ARRAY[i])) != 0; i++){
-                        add_element_at_the_end(ll, i);
-                        curr_count++;
-                    }
-                    for(int i = 0; (strlen(CLIENTS_BOOK_ARRAY[i])) != 0; i++){
-                        count++;
-                    }
-                    added_count = count - old_count;
-                    printf("%d elements were added to the list successfuly\n", added_count);
-                    printf("Now you have %d\n", count);
+            case 1: add_from_file(ll, CLIENTS_BOOK_ARRAY);
                 break;
-            case 2: print_the_linked_list(ll);
+            case 2: print_the_linked_list(ll, CLIENTS_BOOK_ARRAY);
                 break;
-            case 3: save_adress(clients_book_file);
+            case 3: save_ll(clients_book_file, CLIENTS_BOOK_ARRAY, CLIENTS_BOOK);
                 break;
-            case 4: add_adress(ll);
+            case 4: add_something_new(ll, CLIENTS_BOOK_ARRAY);
                     printf("Auto save is set to %d\n", auto_save);
                     if(auto_save == true){
-                        save_adress(clients_book_file);
+                        save_ll(clients_book_file, CLIENTS_BOOK_ARRAY, CLIENTS_BOOK);
                     }
                 break;
             case 5: printf("Auto save is set to %d\n", auto_save);
                     if(auto_save == true){
-                        save_adress(clients_book_file);
+                        save_ll(clients_book_file, CLIENTS_BOOK_ARRAY, CLIENTS_BOOK);
+                    }
+                    looping = false;
+                break;
+            }
+    }
+}
+
+void work_with_adress_book(LinkedList *ll){
+    clearing_space_for_LinkedList(ll);
+    int op = 0;
+
+    FILE * adress_book_file;
+
+    bool looping = true;
+    while(looping == true){
+        print_avail_opt_adress_book();
+
+        printf("Enter op:");
+        scanf("%d", &op);
+            
+        switch(op){
+            case 1: add_from_file(ll, ADRESS_BOOK_ARRAY);
+                break;
+            case 2: print_the_linked_list(ll, ADRESS_BOOK_ARRAY);
+                break;
+            case 3: save_ll(adress_book_file, ADRESS_BOOK_ARRAY, ADRESS_BOOK);
+                break;
+            case 4: add_something_new(ll, ADRESS_BOOK_ARRAY);
+                    printf("Auto save is set to %d\n", auto_save);
+                    if(auto_save == true){
+                        save_ll(adress_book_file, ADRESS_BOOK_ARRAY, ADRESS_BOOK);
+                    }
+                break;
+            case 5: printf("Auto save is set to %d\n", auto_save);
+                    if(auto_save == true){
+                        save_ll(adress_book_file, ADRESS_BOOK_ARRAY, ADRESS_BOOK);
                     }
                     looping = false;
                 break;

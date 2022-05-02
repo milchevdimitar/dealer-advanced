@@ -1,1 +1,1 @@
-adress1,adress2,adress3,adress4,adress5,adress6,adress7,adress8,adress9,adress10,adress11,adress12,adress13,
+adress1,adress2,adress3,adress4,adress5,adress6,adress7,
