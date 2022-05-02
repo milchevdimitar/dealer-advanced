@@ -151,18 +151,6 @@ void print_the_linked_list(LinkedList *ll, char DATA_ARRAY[MAX_SIZE_OF_ARRAYS][M
     printf("\n");
 }
 
-void print_avail_opt_main_menu(){
-    printf("\n");
-    printf("1) Read from the log file\n");
-    printf("2) Save the current inventory in the log file\n");
-    printf("3) Print current inventory and item amounts\n");
-    printf("4) Save\n");
-    printf("5) Test\n");
-    printf("6) Work with your adress book\n");
-    printf("7) Work with your clients book\n");
-    printf("8) Exit\n");
-}
-
 //File things and functions
 void get_inventory_int(){
     int i,n;
@@ -170,7 +158,7 @@ void get_inventory_int(){
     char help[256];
     FILE *InputFile;
     InputFile = fopen(INVENTORY_A, "r");
-    fscanf(InputFile, "%s", help);
+    fscanf(InputFile, "%255s", help);
     token = strtok(help, ",");
     i = 0;
     while(token != NULL){
@@ -188,7 +176,7 @@ void get_inventory_string(){
     char help[256];
     FILE *InputFile;
     InputFile = fopen(INVENTORY_N, "r");
-    fscanf(InputFile, "%s", help);
+    fscanf(InputFile, "%255s", help);
     token = strtok(help, ",");
     while(token != NULL){
         strncpy(INVENTORY_NAMES_ARRAY[i], token, MAX_SIZE_OF_ARRAYS);
@@ -206,7 +194,7 @@ void get_adress_string(){
     char help[256];
     FILE *InputFile;
     InputFile = fopen(ADRESS_BOOK, "r");
-    fscanf(InputFile, "%s", help);
+    fscanf(InputFile, "%255s", help);
     token = strtok(help, ",");
     while(token != NULL){
         strncpy(ADRESS_BOOK_ARRAY[i], token, MAX_SIZE_OF_ARRAYS);
@@ -225,7 +213,7 @@ void get_clients_string(){
     char help[256];
     FILE *InputFile;
     InputFile = fopen(CLIENTS_BOOK, "r");
-    fscanf(InputFile, "%s", help);
+    fscanf(InputFile, "%255s", help);
     token = strtok(help, ",");
     while(token != NULL){
         strncpy(CLIENTS_BOOK_ARRAY[i], token, MAX_SIZE_OF_ARRAYS);
@@ -246,6 +234,18 @@ void print_inventory(){
             printf("Available stock from %s: %d\n",INVENTORY_NAMES_ARRAY[i], INVENTORY_AMOUNT_ARRAY[i]);        
         }
     }
+}
+
+void print_avail_opt_main_menu(){
+    printf("\n");
+    printf("1) Read from the log file\n");
+    printf("2) Save the current inventory in the log file\n");
+    printf("3) Print current inventory and item amounts\n");
+    printf("4) Save\n");
+    printf("5) Test\n");
+    printf("6) Work with your adress book\n");
+    printf("7) Work with your clients book\n");
+    printf("8) Exit\n");
 }
 
 void print_avail_adress(){
@@ -294,7 +294,7 @@ void read_from_log_file(FILE * log_file){
 }
 
 void write_in_the_log_file(int tm_year, int tm_mon, int tm_mday, int tm_hour, int tm_min, int tm_sec){
-    FILE *log_file = calloc(2,sizeof(FILE));
+    FILE *log_file = calloc(6,sizeof(FILE));
     log_file = fopen(ODIT, "a");
     if (log_file == NULL) {
         fprintf(stderr, "error opening log file %s: %s\n",
@@ -303,7 +303,6 @@ void write_in_the_log_file(int tm_year, int tm_mon, int tm_mday, int tm_hour, in
         fprintf(log_file, "Inventory at %02d.%02d.%02d - %02d:%02d:%02d\n", tm_mday, tm_mon, tm_year, tm_hour, tm_min, tm_sec);
         f_print_inventory(log_file);
         fprintf(log_file, "--------------------------------------------------------------\n");
-        fclose(log_file);
     }
 }
 
@@ -463,19 +462,17 @@ void work_with_adress_book(LinkedList *ll){
 
 //Main
 void main(){
-    get_inventory_string();
     get_inventory_int();
-    get_clients_string();
-
+    get_inventory_string();
     time_t T = time(NULL);
     struct tm tm = *localtime(&T);
 
     adress_book = calloc(2,sizeof(adress_book));
     clients_book = calloc(2,sizeof(clients_book));
 
-    FILE * inventory_a;
-    FILE * inventory_n;
-    FILE * log_file;
+    FILE * inventory_a = calloc(2,sizeof(FILE));
+    FILE * inventory_n = calloc(2,sizeof(FILE));
+    FILE * log_file = calloc(2,sizeof(FILE));
     
     bool looping = true;
     while (looping == true){
@@ -483,7 +480,6 @@ void main(){
         print_avail_opt_main_menu();
         printf("Enter op:");
         int op = 0;scanf("%d", &op);
-
         switch (op){
             case 1: read_from_log_file(log_file);
                 break;
@@ -495,6 +491,8 @@ void main(){
                         tm.tm_min, 
                         tm.tm_sec
                     );
+                    FILE * inventory_temp = fopen(INVENTORY_A, "r");
+                    fclose(inventory_temp);
                 break;
             case 3: print_inventory();
                 break;
