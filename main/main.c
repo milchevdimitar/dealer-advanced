@@ -9,27 +9,42 @@
 
 #define MAX_SIZE_OF_ARRAYS 100
 #define MAX_SIZE_OF_PATH_TO_FILES 25
+#define MAX_SIZE_OF_STRINGS 15
+
+#define MONEY_AT_BEG_INT 1000
+#define FUCK_PRICE 100
 
 //Defining file names
 #define ODIT         "odit/log_file.txt"
 #define INVENTORY_N  "base/inventory_names.txt"
 #define INVENTORY_A  "base/inventory_amount.txt"
+#define INVENTORY_P  "base/inventory_prices.txt"
+#define DEALER_L     "base/about_dealer.txt"
 #define ADRESS_BOOK  "external/adress_book.txt"
 #define CLIENTS_BOOK "external/clients_book.txt"
 
 //Defining settings
-#define AUTO_SAVE 1
-#define AUTO_ODIT 0
-#define SECURE_INSERT 1;
-bool auto_save = AUTO_SAVE;
-bool auto_odit = AUTO_ODIT;
-bool secure_insert = SECURE_INSERT;
+bool auto_save = true;
+bool auto_odit = true;
+bool secure_insert = true;
+bool money_at_beg = true;
+bool end_save = true;
 
-//Global arrays
+//Global arrays - статични масиви, защото това са кеш масиви а данните са във файловете и в свързаните списъци
 static int INVENTORY_AMOUNT_ARRAY[MAX_SIZE_OF_ARRAYS];
+static int INVENTORY_PRICES_ARRAY[MAX_SIZE_OF_ARRAYS];
 static char INVENTORY_NAMES_ARRAY[MAX_SIZE_OF_ARRAYS][MAX_SIZE_OF_ARRAYS];
 static char ADRESS_BOOK_ARRAY[MAX_SIZE_OF_ARRAYS][MAX_SIZE_OF_ARRAYS];
 static char CLIENTS_BOOK_ARRAY[MAX_SIZE_OF_ARRAYS][MAX_SIZE_OF_ARRAYS];
+static char CLIENTS_NAME_FOR_SALES_ARRAY[MAX_SIZE_OF_ARRAYS][MAX_SIZE_OF_ARRAYS];
+static int PRICES_FOR_SALES_ARRAY[MAX_SIZE_OF_ARRAYS][MAX_SIZE_OF_ARRAYS];
+
+//Dealer
+struct dealer{
+    int money;
+    int check_ok;
+    char *name;
+}my_og;
 
 //Linked List things and functions for "Adress book"
 typedef struct node_t{
@@ -172,6 +187,24 @@ void get_inventory_int(){
     fclose(InputFile);
 }
 
+void get_inventory_prices_int(){
+    int i,n;
+    char *token;
+    char help[256];
+    FILE *InputFile;
+    InputFile = fopen(INVENTORY_P, "r");
+    fscanf(InputFile, "%255s", help);
+    token = strtok(help, ",");
+    i = 0;
+    while(token != NULL){
+        INVENTORY_PRICES_ARRAY[i] = atoi(token);
+        token = strtok(NULL, ",");
+        i++;
+    }
+    n = i;
+    fclose(InputFile);
+}
+
 void get_inventory_string(){
     char *token;
     char help[256];
@@ -232,7 +265,7 @@ void print_inventory(){
             break;
         }
         else{
-            printf("%s: %d\n",INVENTORY_NAMES_ARRAY[i], INVENTORY_AMOUNT_ARRAY[i]);
+            printf("%s: %d | price: %d$\n",INVENTORY_NAMES_ARRAY[i], INVENTORY_AMOUNT_ARRAY[i], INVENTORY_PRICES_ARRAY[i]);
         }
     }
 }
@@ -242,7 +275,8 @@ void print_avail_opt_main_menu(){
     printf("1) Work with your inventory\n");
     printf("2) Work with your adress book\n");
     printf("3) Work with your clients book\n");
-    printf("4) Exit\n");
+    printf("4) Work with your dealer\n");
+    printf("5) Exit\n");
 }
 
 void print_avail_adress(){
@@ -310,7 +344,19 @@ void save_inventory(FILE * inventory){
         fprintf(inventory, "%d,", INVENTORY_AMOUNT_ARRAY[i]);
     }
     fclose(inventory);
+    printf("Infile info about amounts correctly overwritten\n");
 }   
+
+
+void save_inventory_prices(FILE * inventory){
+    inventory = fopen(INVENTORY_P, "w");
+    for(int i = 0; INVENTORY_PRICES_ARRAY[i] != '\0'; i++){
+        fprintf(inventory, "%d,", INVENTORY_PRICES_ARRAY[i]);
+    }
+    fclose(inventory);
+    printf("Infile info about prices correctly overwritten\n");
+
+}
 
 //Random amounts for testing "saving" feature
 void test(){
@@ -344,17 +390,6 @@ void add_something_new(LinkedList *ll, char DATA_ARRAY[MAX_SIZE_OF_ARRAYS][MAX_S
     printf("Enter the new adress or client:");
     scanf("%s", &DATA_ARRAY[i]);
 }
-
-// void remaining_time(int tm_mday, int tm_hour, int tm_min, int tm_sec){
-//     int g_mday = 0;
-//     int g_mhour = 0;
-//     int g_min = 0;
-//     int g_msec = 0;
-//     scanf("%d:%d:%d:%d" , &g_mday,&g_mhour,&g_min,&g_msec);    
-//     for(;g_mhour >= 24;g_mday++){
-//         for(;)
-//     }
-// }
 
 void add_from_file(LinkedList *ll, char DATA_ARRAY[MAX_SIZE_OF_ARRAYS][MAX_SIZE_OF_ARRAYS]){
     int curr_count = 0;
@@ -488,16 +523,140 @@ void print_avail_opt_inventory(){
     printf("2) Save the current inventory in the log file\n");
     printf("3) Print the current inventory on the screen\n");
     printf("4) Save\n");
-    printf("5) Test\n");
-    printf("6) Exit\n");
+    printf("5) Free restock\n");
+    printf("6) Real restock\n");
+    printf("7) Test\n");
+    printf("8) Exit\n");
+}
+
+void free_restock(){
+    print_inventory();
+
+    printf("\nWhat do u want to restock: ");
+    char temp_string_for_name[MAX_SIZE_OF_STRINGS];
+    scanf("%s", &temp_string_for_name);
+    
+    printf("How much do u want to restock: ");
+    int temp_val_for_restock = 0;
+    scanf("%d", &temp_val_for_restock);
+
+    for(int i = 0; (strlen(INVENTORY_NAMES_ARRAY[i])) != 0; i++){
+        if(strcmp(temp_string_for_name, INVENTORY_NAMES_ARRAY[i]) == 0){
+            INVENTORY_AMOUNT_ARRAY[i] += temp_val_for_restock;
+            printf("Now u have %d from %s\n", INVENTORY_AMOUNT_ARRAY[i], INVENTORY_NAMES_ARRAY[i]);
+        break;
+        }
+    }
+}
+
+void restock(){
+    print_inventory();
+
+    printf("\nWhat do u want to restock: ");
+    char temp_string_for_name[MAX_SIZE_OF_STRINGS];
+    scanf("%s", &temp_string_for_name);
+    
+    printf("How much do u want to restock: ");
+    int temp_val_for_restock = 0;
+    scanf("%d", &temp_val_for_restock);
+
+    for(int i = 0; (strlen(INVENTORY_NAMES_ARRAY[i])) != 0; i++){
+        if(strcmp(temp_string_for_name, INVENTORY_NAMES_ARRAY[i]) == 0){
+            if(temp_val_for_restock*INVENTORY_PRICES_ARRAY[i] < my_og.money){
+                INVENTORY_AMOUNT_ARRAY[i] += temp_val_for_restock;
+                my_og.money -= temp_val_for_restock * INVENTORY_PRICES_ARRAY[i];
+                printf("Now u have %d from %s and %d in cash\n", INVENTORY_AMOUNT_ARRAY[i], INVENTORY_NAMES_ARRAY[i], my_og.money);
+            break;
+            } else {
+                printf("U dont have so much money silly\n");
+            break;
+            }
+        }
+    }
+}
+
+void dealer__save(){
+    FILE * dealer = fopen(DEALER_L, "w");
+    fprintf(dealer,"%d  %d  %s", my_og.money, my_og.check_ok, my_og.name);
+    fclose(dealer);
+    printf("Infile info about dealer correctly overwritten\n");
+}
+
+void dealer__init(){
+    my_og.name = calloc(MAX_SIZE_OF_STRINGS, sizeof(const char));
+    FILE * dealer = fopen(DEALER_L, "r");
+    fscanf(dealer, "%d  %d  %255s", &my_og.money, &my_og.check_ok, my_og.name);
+    printf("%s\n", my_og.name);
+    printf("%d\n", my_og.money);
+    printf("%d\n", my_og.check_ok);
+    
+    if(money_at_beg == true && my_og.check_ok == 0){
+        my_og.money = MONEY_AT_BEG_INT;
+        my_og.check_ok = 1;
+        dealer__save();
+    }
+    printf("My name is set to: %s", my_og.name);
+    fclose(dealer);
+}
+
+void dealer__check(){
+    printf("Name: %s | Money: %d$\n", my_og.name, my_og.money);
+    printf("Startup money set to %d\n", money_at_beg);
+    dealer__save();
+}
+
+void dealer__moneypowerup(){
+    printf("How much do u want to take from them: ");
+    int credit = 0;
+    scanf("%d", &credit);
+    my_og.money += credit;
+    credit /= FUCK_PRICE;
+    printf("U have to be fucked %d times\n", credit);
+}
+void print_dealer_menu(){
+    printf("1) Print info about dealer\n");
+    printf("2) Get money from fucking\n");
+    printf("3) Exit\n");
+}
+
+void dealer__operate(){
+    bool looping = true;
+    while(looping){
+        int op = 0;
+        print_dealer_menu();
+        scanf("%d", &op);
+        switch (op){
+        case 1: dealer__check();
+            break;
+        case 2: dealer__moneypowerup();
+                dealer__check();
+        default: looping = false;
+            break;
+        }
+    }
+}
+
+void main__save(){
+    FILE * inventory_a;
+    FILE * inventory_p;
+    save_inventory(inventory_a);
+    save_inventory_prices(inventory_p);
+    dealer__save();
+}
+
+void sales(){
+    
+
 }
 
 void work_with_inventory(){
     get_inventory_int();
-    get_inventory_string();       
+    get_inventory_prices_int();
+    get_inventory_string();     
                     
     FILE * inventory_a = calloc(2,sizeof(FILE));
     FILE * inventory_n = calloc(2,sizeof(FILE));
+    FILE * inventory_p = calloc(2,sizeof(FILE));
     FILE * log_file = calloc(2,sizeof(FILE));
 
     time_t T = time(NULL);
@@ -508,7 +667,8 @@ void work_with_inventory(){
 
         print_avail_opt_inventory();
         printf("Enter op:");
-        int op = 0;scanf("%d", &op);
+        int op = 0;
+        scanf("%d", &op);
         switch (op){
             case 1: read_from_log_file(log_file);
                 break;
@@ -524,10 +684,16 @@ void work_with_inventory(){
             case 3: print_inventory();
                 break;
             case 4: save_inventory(inventory_a);
+                    save_inventory_prices(inventory_p);
+                    dealer__save();
                 break;
-            case 5: test();
+            case 5: free_restock();
                 break;
-            case 6: looping = false;
+            case 6: restock();
+                break;
+            case 7: test();
+                break;
+            case 8: looping = false;
                 break;
         }
     }
@@ -537,13 +703,16 @@ void work_with_inventory(){
 void main(){
     adress_book = calloc(2,sizeof(adress_book));
     clients_book = calloc(2,sizeof(clients_book));
-    
+
+    dealer__init();
+
     bool looping = true;
     while (looping == true){
 
         print_avail_opt_main_menu();
         printf("Enter op:");
-        int op = 0;scanf("%d", &op);
+        int op = 0;
+        scanf("%d", &op);
         switch (op){
             case 1: work_with_inventory();
                 break;
@@ -551,7 +720,12 @@ void main(){
                 break;
             case 3: work_with_clients_book(clients_book);
                 break;
-            case 4: looping = false;
+            case 4: dealer__operate();
+                break;
+            case 5: looping = false;
+                if(end_save == true){
+                    main__save();
+                }
                 break;
             default: printf("Not correct option\n");
                 break;
