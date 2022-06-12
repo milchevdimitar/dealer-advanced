@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include <stdint.h>
 #include <errno.h>
 #include <math.h>
 #include <time.h>
@@ -16,28 +17,31 @@
 
 //Defining file names
 #define ODIT         "odit/log_file.txt"
+#define SALES_D		 "odit/diary.txt"
 #define INVENTORY_N  "base/inventory_names.txt"
 #define INVENTORY_A  "base/inventory_amount.txt"
 #define INVENTORY_P  "base/inventory_prices.txt"
 #define DEALER_L     "base/about_dealer.txt"
 #define ADRESS_BOOK  "external/adress_book.txt"
 #define CLIENTS_BOOK "external/clients_book.txt"
+#define CLIENTS_DISC "external/clients_disc.txt"
 
 //Defining settings
 bool auto_save = true;
 bool auto_odit = true;
 bool secure_insert = true;
 bool money_at_beg = true;
-bool end_save = true;
+bool end_save = false; //dangerous
 
-//Global arrays - статични масиви, защото това са кеш масиви а данните са във файловете и в свързаните списъци
-static int INVENTORY_AMOUNT_ARRAY[MAX_SIZE_OF_ARRAYS];
-static int INVENTORY_PRICES_ARRAY[MAX_SIZE_OF_ARRAYS];
+//Global arrays - cache arrays
+static intmax_t INVENTORY_AMOUNT_ARRAY[MAX_SIZE_OF_ARRAYS];
+static intmax_t INVENTORY_PRICES_ARRAY[MAX_SIZE_OF_ARRAYS];
 static char INVENTORY_NAMES_ARRAY[MAX_SIZE_OF_ARRAYS][MAX_SIZE_OF_ARRAYS];
 static char ADRESS_BOOK_ARRAY[MAX_SIZE_OF_ARRAYS][MAX_SIZE_OF_ARRAYS];
+static intmax_t ADRESS_MEETUP_HOURS[MAX_SIZE_OF_ARRAYS];
+static intmax_t ADRESS_MEETUP_MINS[MAX_SIZE_OF_ARRAYS];
 static char CLIENTS_BOOK_ARRAY[MAX_SIZE_OF_ARRAYS][MAX_SIZE_OF_ARRAYS];
-static char CLIENTS_NAME_FOR_SALES_ARRAY[MAX_SIZE_OF_ARRAYS][MAX_SIZE_OF_ARRAYS];
-static int PRICES_FOR_SALES_ARRAY[MAX_SIZE_OF_ARRAYS][MAX_SIZE_OF_ARRAYS];
+static intmax_t CLIENTS_DISCOUNTS[MAX_SIZE_OF_ARRAYS];
 
 //Dealer
 struct dealer{
@@ -158,11 +162,14 @@ int add_element_on_another_spot(LinkedList *ll, int new_val){
     iterator->prev = new_node;
 }
 
-void print_the_linked_list(LinkedList *ll, char DATA_ARRAY[MAX_SIZE_OF_ARRAYS][MAX_SIZE_OF_ARRAYS]){
+void print_the_linked_list(LinkedList *ll, char DATA_ARRAY[MAX_SIZE_OF_ARRAYS][MAX_SIZE_OF_ARRAYS], bool clients_loop, bool adress_loop){
     Node *curr = ll->head;
-
     while (curr) {
-        printf("%s ", DATA_ARRAY[curr->value]);
+        if(clients_loop == true){
+            printf("%s | Discount: +%d%\n", DATA_ARRAY[curr->value], CLIENTS_DISCOUNTS[curr->value]);
+        } else if(adress_loop == true) {
+            printf("%s\n", DATA_ARRAY[curr->value]);    
+        }
         curr = curr->next;
     }
     printf("\n");
@@ -180,6 +187,24 @@ void get_inventory_int(){
     i = 0;
     while(token != NULL){
         INVENTORY_AMOUNT_ARRAY[i] = atoi(token);
+        token = strtok(NULL, ",");
+        i++;
+    }
+    n = i;
+    fclose(InputFile);
+}
+
+void get_clidisc_int(){
+    int i,n;
+    char *token;
+    char help[256];
+    FILE *InputFile;
+    InputFile = fopen(CLIENTS_DISC, "r");
+    fscanf(InputFile, "%255s", help);
+    token = strtok(help, ",");
+    i = 0;
+    while(token != NULL){
+        CLIENTS_DISCOUNTS[i] = atoi(token);
         token = strtok(NULL, ",");
         i++;
     }
@@ -276,7 +301,8 @@ void print_avail_opt_main_menu(){
     printf("2) Work with your adress book\n");
     printf("3) Work with your clients book\n");
     printf("4) Work with your dealer\n");
-    printf("5) Exit\n");
+    printf("5) Main save\n");
+    printf("6) Exit\n");
 }
 
 void print_avail_adress(){
@@ -325,17 +351,14 @@ void read_from_log_file(FILE * log_file){
 }
 
 void write_in_the_log_file(int tm_year, int tm_mon, int tm_mday, int tm_hour, int tm_min, int tm_sec){
-    FILE *log_file = calloc(6,sizeof(FILE));
-    log_file = fopen(ODIT, "a");
+    FILE *log_file = fopen(ODIT, "a");
     if (log_file == NULL) {
         fprintf(stderr, "error opening log file %s: %s\n",
                 ODIT, strerror(errno));
     } else {
         fprintf(log_file, "Inventory at %02d.%02d.%02d - %02d:%02d:%02d\n", tm_mday, tm_mon, tm_year, tm_hour, tm_min, tm_sec);
         f_print_inventory(log_file);
-        fprintf(log_file, "--------------------------------------------------------------\n");
     }
-    fclose(log_file);
 }
 
 void save_inventory(FILE * inventory){
@@ -355,6 +378,16 @@ void save_inventory_prices(FILE * inventory){
     }
     fclose(inventory);
     printf("Infile info about prices correctly overwritten\n");
+
+}
+
+void save_inventory_names(){
+    FILE * inventory = fopen(INVENTORY_N, "w");
+    for(int i = 0; strlen(INVENTORY_NAMES_ARRAY[i]) != 0; i++){
+        fprintf(inventory, "%s,", INVENTORY_NAMES_ARRAY[i]);
+    }
+    fclose(inventory);
+    printf("Infile info about names correctly overwritten\n");
 
 }
 
@@ -422,8 +455,20 @@ void print_avail_opt_clients_book(){
     printf("5) Exit\n");
 }
 
+void save_cli_disc(){
+    FILE * cli = fopen(CLIENTS_DISC, "w");
+    for(int i = 0; CLIENTS_DISCOUNTS[i] != '\0'; i++){
+        fprintf(cli, "%d,", CLIENTS_DISCOUNTS[i]);
+        printf("%d,", CLIENTS_DISCOUNTS[i]);
+    }
+    
+    fclose(cli);
+    printf("Infile info about clients discounts correctly overwritten\n");
+}
+
 void work_with_clients_book(LinkedList *ll){
     clearing_space_for_LinkedList(ll);
+    get_clidisc_int();
     int op = 0;
 
     FILE * clients_book_file;
@@ -449,14 +494,21 @@ void work_with_clients_book(LinkedList *ll){
                         printf("Secure insert is set to %d\n", secure_insert);
                     }
                 break;
-            case 2: print_the_linked_list(ll, CLIENTS_BOOK_ARRAY);
+            case 2: print_the_linked_list(ll, CLIENTS_BOOK_ARRAY, true, false);
                 break;
             case 3: save_ll(clients_book_file, CLIENTS_BOOK_ARRAY, CLIENTS_BOOK);
+                    save_cli_disc();
                 break;
             case 4: add_something_new(ll, CLIENTS_BOOK_ARRAY);
+                    int i;
+                    for(i = 0; strlen(CLIENTS_BOOK_ARRAY[i]) != 0; i++){}
+                    i--;
+                    printf("How much discount do u give to your client:");
+                    scanf("%d", &CLIENTS_DISCOUNTS[i]);
                     printf("Auto save is set to %d\n", auto_save);
                     if(auto_save == true){
                         save_ll(clients_book_file, CLIENTS_BOOK_ARRAY, CLIENTS_BOOK);
+                        save_cli_disc();
                     }
                 break;
             case 5: printf("Auto save is set to %d\n", auto_save);
@@ -497,7 +549,7 @@ void work_with_adress_book(LinkedList *ll){
                         printf("Secure insert is set to %d\n", secure_insert);
                     }
                 break;
-            case 2: print_the_linked_list(ll, ADRESS_BOOK_ARRAY);
+            case 2: print_the_linked_list(ll, ADRESS_BOOK_ARRAY, false, true);
                 break;
             case 3: save_ll(adress_book_file, ADRESS_BOOK_ARRAY, ADRESS_BOOK);
                 break;
@@ -525,8 +577,10 @@ void print_avail_opt_inventory(){
     printf("4) Save\n");
     printf("5) Free restock\n");
     printf("6) Real restock\n");
-    printf("7) Test\n");
-    printf("8) Exit\n");
+    printf("7) Sale\n");
+	printf("8) Add new product\n");
+    printf("9) Test - for debug\n");
+    printf("10) Exit\n");
 }
 
 void free_restock(){
@@ -564,8 +618,8 @@ void restock(){
         if(strcmp(temp_string_for_name, INVENTORY_NAMES_ARRAY[i]) == 0){
             if(temp_val_for_restock*INVENTORY_PRICES_ARRAY[i] < my_og.money){
                 INVENTORY_AMOUNT_ARRAY[i] += temp_val_for_restock;
-                my_og.money -= temp_val_for_restock * INVENTORY_PRICES_ARRAY[i];
-                printf("Now u have %d from %s and %d in cash\n", INVENTORY_AMOUNT_ARRAY[i], INVENTORY_NAMES_ARRAY[i], my_og.money);
+				my_og.money -= temp_val_for_restock * INVENTORY_PRICES_ARRAY[i];
+				printf("Now u have %d from %s and %d in cash\n", INVENTORY_AMOUNT_ARRAY[i], INVENTORY_NAMES_ARRAY[i], my_og.money);
             break;
             } else {
                 printf("U dont have so much money silly\n");
@@ -644,16 +698,85 @@ void main__save(){
     dealer__save();
 }
 
-void sales(){
-    
+int sale(){
+    print_inventory();
+    time_t T = time(NULL);
+    struct tm tm = *localtime(&T);
 
+    printf("\nWhat do u want to sale: ");
+    char temp_string_for_prname[MAX_SIZE_OF_STRINGS];
+    scanf("%s", &temp_string_for_prname);
+    
+    printf("How much do u want to sale: ");
+    int temp_val_for_sale = 0;
+    scanf("%d", &temp_val_for_sale);
+
+    printf("Who do u want to sale %d from %s to: ", temp_val_for_sale,temp_string_for_prname);
+    char temp_string_for_cliname[MAX_SIZE_OF_STRINGS];
+    scanf("%s", &temp_string_for_cliname);
+    getchar();
+
+    int ovr_price = 0;
+    int profit = 0;
+    
+    for(int i = 0; (strlen(INVENTORY_NAMES_ARRAY[i])) != 0; i++){
+        if((strcmp(temp_string_for_prname, INVENTORY_NAMES_ARRAY[i])) == 0){
+       		if(INVENTORY_AMOUNT_ARRAY[i] >= temp_val_for_sale){
+                int j;
+                for(j = 0; strlen(CLIENTS_BOOK_ARRAY[j]) != 0; j++){
+                    if(strcmp(CLIENTS_BOOK_ARRAY[j], temp_string_for_cliname) == 0){
+                        ovr_price = INVENTORY_PRICES_ARRAY[i];
+                        ovr_price += (INVENTORY_PRICES_ARRAY[i] * CLIENTS_DISCOUNTS[j]) / 100;
+                        profit = ovr_price - INVENTORY_PRICES_ARRAY[i];
+                    }         
+                }
+    			
+                INVENTORY_AMOUNT_ARRAY[i] -= temp_val_for_sale;
+				my_og.money += ovr_price;
+				
+                printf("You have succesfully sold %d from %s to %s\n",
+                temp_val_for_sale, INVENTORY_NAMES_ARRAY[i], temp_string_for_cliname);
+                
+                if(auto_odit == true){
+                	FILE * sales_f = fopen(SALES_D, "a");
+				    fprintf(sales_f, "You have succesfully sold %d from %s to %s at %02d.%02d.%02d - %02d:%02d:%02d | Profit:%d$ \n",
+                    temp_val_for_sale, INVENTORY_NAMES_ARRAY[i], temp_string_for_cliname,
+                    1900+tm.tm_year, tm.tm_mon, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec,
+                    profit);
+                    fclose(sales_f);
+                
+                write_in_the_log_file(
+                        tm.tm_year + 1900, 
+                        tm.tm_mon + 1, 
+                        tm.tm_mday, 
+                        tm.tm_hour, 
+                        tm.tm_min, 
+                        tm.tm_sec
+                );
+                }
+            break;
+			} else printf("Im not a bank bro\n");
+		} 
+	}
+}
+
+void cache_add_product(){
+    int i = 0;
+    for(;(strlen(INVENTORY_NAMES_ARRAY[i])) != 0; i++){}
+    printf("Enter the product's name:");
+    scanf("%s", &INVENTORY_NAMES_ARRAY[i]);
+    printf("Enter the product's price:");
+    scanf("%d", &INVENTORY_PRICES_ARRAY[i]);
+    printf("How much is available in stock:");
+    scanf("%d", &INVENTORY_AMOUNT_ARRAY[i]);
 }
 
 void work_with_inventory(){
     get_inventory_int();
     get_inventory_prices_int();
     get_inventory_string();     
-                    
+    get_clidisc_int();
+
     FILE * inventory_a = calloc(2,sizeof(FILE));
     FILE * inventory_n = calloc(2,sizeof(FILE));
     FILE * inventory_p = calloc(2,sizeof(FILE));
@@ -685,22 +808,27 @@ void work_with_inventory(){
                 break;
             case 4: save_inventory(inventory_a);
                     save_inventory_prices(inventory_p);
+                    save_inventory_names();
                     dealer__save();
                 break;
             case 5: free_restock();
                 break;
             case 6: restock();
                 break;
-            case 7: test();
+			case 7: sale();
+				break;
+            case 8: cache_add_product();
                 break;
-            case 8: looping = false;
+            case 9: test();
+                break;
+            case 10: looping = false;
                 break;
         }
     }
 }
 
 //Main
-void main(){
+int main(void){
     adress_book = calloc(2,sizeof(adress_book));
     clients_book = calloc(2,sizeof(clients_book));
 
@@ -722,7 +850,9 @@ void main(){
                 break;
             case 4: dealer__operate();
                 break;
-            case 5: looping = false;
+            case 5: main__save();
+                break;
+            case 6: looping = false;
                 if(end_save == true){
                     main__save();
                 }

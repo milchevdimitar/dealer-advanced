@@ -1,543 +1,238 @@
-Inventory at 01.05.2022 - 18:35:00
+Inventory at 12.06.2022 - 00:07:50
 Item: product1
-Amount: 1714636915
+Amount: 130
 Item: product2
-Amount: 1957747793
+Amount: 125
 Item: product3
-Amount: 424238335
-Inventory at 01.05.2022 - 19:03:39
+Amount: 160
+Inventory at 12.06.2022 - 00:10:10
 Item: product1
-Amount: 1714636915
+Amount: 120
 Item: product2
-Amount: 1957747793
+Amount: 125
 Item: product3
-Amount: 424238335
-Inventory at 01.05.2022 - 19:21:58
+Amount: 160
+Inventory at 12.06.2022 - 00:11:50
 Item: product1
-Amount: 1714636915
+Amount: 120
 Item: product2
-Amount: 1957747793
+Amount: 125
 Item: product3
-Amount: 424238335
-Inventory at 01.05.2022 - 19:22:08
+Amount: 160
+Inventory at 12.06.2022 - 00:13:09
 Item: product1
-Amount: 1714636915
+Amount: 120
 Item: product2
-Amount: 1957747793
+Amount: 115
 Item: product3
-Amount: 424238335
-Inventory at 01.05.2022 - 19:24:25
+Amount: 160
+Inventory at 12.06.2022 - 00:15:49
 Item: product1
-Amount: 1714636915
+Amount: 105
 Item: product2
-Amount: 1957747793
+Amount: 115
 Item: product3
-Amount: 424238335
-Inventory at 01.05.2022 - 19:24:29
+Amount: 160
+Inventory at 12.06.2022 - 00:19:04
 Item: product1
-Amount: 1714636915
+Amount: 95
 Item: product2
-Amount: 1957747793
+Amount: 115
 Item: product3
-Amount: 424238335
-Inventory at 01.05.2022 - 19:24:29
+Amount: 160
+Inventory at 12.06.2022 - 00:21:34
 Item: product1
-Amount: 1714636915
+Amount: 85
 Item: product2
-Amount: 1957747793
+Amount: 115
 Item: product3
-Amount: 424238335
-Inventory at 01.05.2022 - 19:24:29
+Amount: 160
+Inventory at 12.06.2022 - 00:24:22
 Item: product1
-Amount: 1714636915
+Amount: 85
 Item: product2
-Amount: 1957747793
+Amount: 115
 Item: product3
-Amount: 424238335
-Inventory at 01.05.2022 - 19:24:29
+Amount: 160
+Inventory at 12.06.2022 - 00:25:15
 Item: product1
-Amount: 1714636915
+Amount: 85
 Item: product2
-Amount: 1957747793
+Amount: 115
 Item: product3
-Amount: 424238335
-Inventory at 01.05.2022 - 19:26:29
+Amount: 160
+Inventory at 12.06.2022 - 00:27:01
 Item: product1
-Amount: 1714636915
+Amount: 95
 Item: product2
-Amount: 1957747793
+Amount: 112
 Item: product3
-Amount: 424238335
-Inventory at 01.05.2022 - 19:26:29
+Amount: 160
+Inventory at 12.06.2022 - 00:28:36
 Item: product1
-Amount: 1714636915
+Amount: 93
 Item: product2
-Amount: 1957747793
+Amount: 115
 Item: product3
-Amount: 424238335
-Inventory at 01.05.2022 - 19:26:34
+Amount: 160
+Inventory at 12.06.2022 - 00:30:07
 Item: product1
-Amount: 1714636915
+Amount: 93
 Item: product2
-Amount: 1957747793
+Amount: 115
 Item: product3
-Amount: 424238335
-Inventory at 01.05.2022 - 19:26:34
+Amount: 160
+Inventory at 12.06.2022 - 00:34:15
 Item: product1
-Amount: 1714636915
+Amount: 93
 Item: product2
-Amount: 1957747793
+Amount: 115
 Item: product3
-Amount: 424238335
-Inventory at 01.05.2022 - 19:26:34
+Amount: 160
+Inventory at 12.06.2022 - 00:35:10
 Item: product1
-Amount: 1714636915
+Amount: 85
 Item: product2
-Amount: 1957747793
+Amount: 115
 Item: product3
-Amount: 424238335
-Inventory at 01.05.2022 - 19:26:34
+Amount: 160
+Inventory at 12.06.2022 - 00:39:38
 Item: product1
-Amount: 1714636915
+Amount: 93
 Item: product2
-Amount: 1957747793
+Amount: 115
 Item: product3
-Amount: 424238335
-Inventory at 01.05.2022 - 19:26:34
+Amount: 160
+Inventory at 12.06.2022 - 00:42:35
 Item: product1
-Amount: 1714636915
+Amount: 83
 Item: product2
-Amount: 1957747793
+Amount: 115
 Item: product3
-Amount: 424238335
-Inventory at 01.05.2022 - 19:26:39
+Amount: 160
+Inventory at 12.06.2022 - 00:44:38
 Item: product1
-Amount: 1714636915
+Amount: 83
 Item: product2
-Amount: 1957747793
+Amount: 115
 Item: product3
-Amount: 424238335
-Inventory at 01.05.2022 - 19:26:39
+Amount: 160
+Inventory at 12.06.2022 - 00:45:54
 Item: product1
-Amount: 1714636915
+Amount: 83
 Item: product2
-Amount: 1957747793
+Amount: 115
 Item: product3
-Amount: 424238335
-Inventory at 01.05.2022 - 19:26:39
+Amount: 160
+Inventory at 12.06.2022 - 00:53:52
 Item: product1
-Amount: 1714636915
+Amount: 91
 Item: product2
-Amount: 1957747793
+Amount: 115
 Item: product3
-Amount: 424238335
-Inventory at 01.05.2022 - 19:26:39
+Amount: 160
+Inventory at 12.06.2022 - 01:18:48
 Item: product1
-Amount: 1714636915
+Amount: 83
 Item: product2
-Amount: 1957747793
+Amount: 115
 Item: product3
-Amount: 424238335
-Inventory at 01.05.2022 - 20:56:39
+Amount: 160
+Inventory at 12.06.2022 - 01:20:09
 Item: product1
-Amount: 1714636915
+Amount: 83
 Item: product2
-Amount: 1957747793
+Amount: 115
 Item: product3
-Amount: 424238335
-Inventory at 02.05.2022 - 13:07:56
+Amount: 160
+Inventory at 12.06.2022 - 01:21:35
 Item: product1
-Amount: 1714636915
+Amount: 83
 Item: product2
-Amount: 1957747793
+Amount: 115
 Item: product3
-Amount: 424238335
-Inventory at 02.05.2022 - 13:08:00
+Amount: 160
+Inventory at 12.06.2022 - 01:27:21
 Item: product1
-Amount: 1714636915
+Amount: 90
 Item: product2
-Amount: 1957747793
+Amount: 115
 Item: product3
-Amount: 424238335
-Inventory at 02.05.2022 - 13:08:01
+Amount: 160
+Inventory at 12.06.2022 - 01:28:10
 Item: product1
-Amount: 1714636915
+Amount: 90
 Item: product2
-Amount: 1957747793
+Amount: 115
 Item: product3
-Amount: 424238335
-Inventory at 02.05.2022 - 13:08:01
+Amount: 160
+Inventory at 12.06.2022 - 01:31:13
 Item: product1
-Amount: 1714636915
+Amount: 90
 Item: product2
-Amount: 1957747793
+Amount: 115
 Item: product3
-Amount: 424238335
-Inventory at 02.05.2022 - 13:08:01
+Amount: 160
+Inventory at 12.06.2022 - 01:32:29
 Item: product1
-Amount: 1714636915
+Amount: 83
 Item: product2
-Amount: 1957747793
+Amount: 115
 Item: product3
-Amount: 424238335
-Inventory at 02.05.2022 - 13:08:01
+Amount: 160
+Inventory at 12.06.2022 - 01:34:55
 Item: product1
-Amount: 1714636915
+Amount: 90
 Item: product2
-Amount: 1957747793
+Amount: 115
 Item: product3
-Amount: 424238335
-Inventory at 02.05.2022 - 13:19:27
-Item: 
-Amount: 1714636915
-Item: 
-Amount: 1957747793
-Item: 
-Amount: 424238335
-Inventory at 02.05.2022 - 13:19:27
-Item: 
-Amount: 1714636915
-Item: 
-Amount: 1957747793
-Item: 
-Amount: 424238335
-Inventory at 02.05.2022 - 13:19:27
-Item: 
-Amount: 1714636915
-Item: 
-Amount: 1957747793
-Item: 
-Amount: 424238335
-Inventory at 02.05.2022 - 13:19:27
-Item: 
-Amount: 1714636915
-Item: 
-Amount: 1957747793
-Item: 
-Amount: 424238335
-Inventory at 02.05.2022 - 13:19:27
-Item: 
-Amount: 1714636915
-Item: 
-Amount: 1957747793
-Item: 
-Amount: 424238335
-Inventory at 02.05.2022 - 13:27:44
-Item: 
-Amount: 1714636915
-Item: 
-Amount: 1957747793
-Item: 
-Amount: 424238335
-Inventory at 02.05.2022 - 13:27:44
-Item: 
-Amount: 1714636915
-Item: 
-Amount: 1957747793
-Item: 
-Amount: 424238335
-Inventory at 02.05.2022 - 13:27:44
-Item: 
-Amount: 1714636915
-Item: 
-Amount: 1957747793
-Item: 
-Amount: 424238335
-Inventory at 02.05.2022 - 13:27:44
-Item: 
-Amount: 1714636915
-Item: 
-Amount: 1957747793
-Item: 
-Amount: 424238335
-Inventory at 02.05.2022 - 13:36:27
-Item: 
-Amount: 1714636915
-Item: 
-Amount: 1957747793
-Item: 
-Amount: 424238335
-Inventory at 02.05.2022 - 13:36:27
-Item: 
-Amount: 1714636915
-Item: 
-Amount: 1957747793
-Item: 
-Amount: 424238335
-Inventory at 02.05.2022 - 13:36:27
-Item: 
-Amount: 1714636915
-Item: 
-Amount: 1957747793
-Item: 
-Amount: 424238335
-Inventory at 02.05.2022 - 13:36:29
-Item: 
-Amount: 1714636915
-Item: 
-Amount: 1957747793
-Item: 
-Amount: 424238335
-Inventory at 02.05.2022 - 13:36:29
-Item: 
-Amount: 1714636915
-Item: 
-Amount: 1957747793
-Item: 
-Amount: 424238335
-Inventory at 02.05.2022 - 13:36:29
-Item: 
-Amount: 1714636915
-Item: 
-Amount: 1957747793
-Item: 
-Amount: 424238335
-Inventory at 02.05.2022 - 13:36:31
-Item: 
-Amount: 1714636915
-Item: 
-Amount: 1957747793
-Item: 
-Amount: 424238335
-Inventory at 02.05.2022 - 13:36:33
-Item: 
-Amount: 1714636915
-Item: 
-Amount: 1957747793
-Item: 
-Amount: 424238335
-Inventory at 02.05.2022 - 13:36:33
-Item: 
-Amount: 1714636915
-Item: 
-Amount: 1957747793
-Item: 
-Amount: 424238335
-Inventory at 02.05.2022 - 13:36:35
-Item: 
-Amount: 1714636915
-Item: 
-Amount: 1957747793
-Item: 
-Amount: 424238335
-Inventory at 02.05.2022 - 13:36:35
-Item: 
-Amount: 1714636915
-Item: 
-Amount: 1957747793
-Item: 
-Amount: 424238335
-Inventory at 02.05.2022 - 13:36:37
-Item: 
-Amount: 1714636915
-Item: 
-Amount: 1957747793
-Item: 
-Amount: 424238335
-Inventory at 02.05.2022 - 13:36:37
-Item: 
-Amount: 1714636915
-Item: 
-Amount: 1957747793
-Item: 
-Amount: 424238335
-Inventory at 02.05.2022 - 13:36:39
-Item: 
-Amount: 1714636915
-Item: 
-Amount: 1957747793
-Item: 
-Amount: 424238335
-Inventory at 02.05.2022 - 13:36:43
-Item: 
-Amount: 1714636915
-Item: 
-Amount: 1957747793
-Item: 
-Amount: 424238335
-Inventory at 02.05.2022 - 13:36:43
-Item: 
-Amount: 1714636915
-Item: 
-Amount: 1957747793
-Item: 
-Amount: 424238335
-Inventory at 02.05.2022 - 13:36:43
-Item: 
-Amount: 1714636915
-Item: 
-Amount: 1957747793
-Item: 
-Amount: 424238335
-Inventory at 02.05.2022 - 13:36:45
-Item: 
-Amount: 1714636915
-Item: 
-Amount: 1957747793
-Item: 
-Amount: 424238335
-Inventory at 02.05.2022 - 13:36:47
-Item: 
-Amount: 1714636915
-Item: 
-Amount: 1957747793
-Item: 
-Amount: 424238335
-Inventory at 02.05.2022 - 13:36:48
-Item: 
-Amount: 1714636915
-Item: 
-Amount: 1957747793
-Item: 
-Amount: 424238335
-Inventory at 02.05.2022 - 13:36:49
-Item: 
-Amount: 1714636915
-Item: 
-Amount: 1957747793
-Item: 
-Amount: 424238335
-Inventory at 02.05.2022 - 13:37:29
-Item: 
-Amount: 1714636915
-Item: 
-Amount: 1957747793
-Item: 
-Amount: 424238335
-Inventory at 02.05.2022 - 13:37:31
-Item: 
-Amount: 1714636915
-Item: 
-Amount: 1957747793
-Item: 
-Amount: 424238335
-Inventory at 02.05.2022 - 13:37:31
-Item: 
-Amount: 1714636915
-Item: 
-Amount: 1957747793
-Item: 
-Amount: 424238335
-Inventory at 02.05.2022 - 13:37:31
-Item: 
-Amount: 1714636915
-Item: 
-Amount: 1957747793
-Item: 
-Amount: 424238335
-Inventory at 02.05.2022 - 13:37:33
-Item: 
-Amount: 1714636915
-Item: 
-Amount: 1957747793
-Item: 
-Amount: 424238335
-Inventory at 02.05.2022 - 13:37:35
-Item: 
-Amount: 1714636915
-Item: 
-Amount: 1957747793
-Item: 
-Amount: 424238335
-Inventory at 02.05.2022 - 13:37:36
-Item: 
-Amount: 1714636915
-Item: 
-Amount: 1957747793
-Item: 
-Amount: 424238335
-Inventory at 02.05.2022 - 13:37:36
-Item: 
-Amount: 1714636915
-Item: 
-Amount: 1957747793
-Item: 
-Amount: 424238335
-Inventory at 02.05.2022 - 13:37:38
-Item: 
-Amount: 1714636915
-Item: 
-Amount: 1957747793
-Item: 
-Amount: 424238335
-Inventory at 02.05.2022 - 13:37:39
-Item: 
-Amount: 1714636915
-Item: 
-Amount: 1957747793
-Item: 
-Amount: 424238335
-Inventory at 02.05.2022 - 13:37:42
-Item: 
-Amount: 1714636915
-Item: 
-Amount: 1957747793
-Item: 
-Amount: 424238335
-Inventory at 02.05.2022 - 16:16:19
-Item: 
-Amount: 1714636915
-Item: 
-Amount: 1957747793
-Item: 
-Amount: 424238335
-Inventory at 02.05.2022 - 16:16:24
-Item: 
-Amount: 1714636915
-Item: 
-Amount: 1957747793
-Item: 
-Amount: 424238335
-Inventory at 02.05.2022 - 16:16:24
-Item: 
-Amount: 1714636915
-Item: 
-Amount: 1957747793
-Item: 
-Amount: 424238335
-Inventory at 02.05.2022 - 16:16:24
-Item: 
-Amount: 1714636915
-Item: 
-Amount: 1957747793
-Item: 
-Amount: 424238335
-Inventory at 02.05.2022 - 16:16:24
-Item: 
-Amount: 1714636915
-Item: 
-Amount: 1957747793
-Item: 
-Amount: 424238335
-Inventory at 02.05.2022 - 16:16:24
-Item: 
-Amount: 1714636915
-Item: 
-Amount: 1957747793
-Item: 
-Amount: 424238335
-Inventory at 02.05.2022 - 16:25:46
-Inventory at 02.05.2022 - 16:28:50
-Inventory at 02.05.2022 - 16:28:54
-Inventory at 02.05.2022 - 16:28:55
-Inventory at 02.05.2022 - 16:28:57
-Inventory at 02.05.2022 - 17:08:53
-Inventory at 02.05.2022 - 17:20:37
-Inventory at 02.05.2022 - 17:20:41
-Inventory at 02.05.2022 - 17:20:42
-Inventory at 02.05.2022 - 17:20:42
-Inventory at 02.05.2022 - 17:20:42
-Inventory at 02.05.2022 - 17:26:00
+Amount: 160
+Inventory at 12.06.2022 - 01:36:45
 Item: product1
-Amount: 1804289383
+Amount: 83
 Item: product2
-Amount: 846930886
+Amount: 115
 Item: product3
-Amount: 1681692777
-Inventory at 06.06.2022 - 20:29:55
+Amount: 160
+Inventory at 12.06.2022 - 01:38:00
 Item: product1
-Amount: 10020200
+Amount: 90
 Item: product2
-Amount: 22323242
+Amount: 115
 Item: product3
-Amount: 33332132
+Amount: 160
+Inventory at 12.06.2022 - 01:41:01
+Item: product1
+Amount: 90
+Item: product2
+Amount: 115
+Item: product3
+Amount: 160
+Inventory at 12.06.2022 - 01:42:30
+Item: product1
+Amount: 90
+Item: product2
+Amount: 115
+Item: product3
+Amount: 160
+Inventory at 12.06.2022 - 01:44:00
+Item: product1
+Amount: 90
+Item: product2
+Amount: 115
+Item: product3
+Amount: 160
+Inventory at 12.06.2022 - 01:45:33
+Item: product1
+Amount: 90
+Item: product2
+Amount: 115
+Item: product3
+Amount: 160
+Inventory at 12.06.2022 - 01:50:55
+Item: product1
+Amount: 90
+Item: product2
+Amount: 115
+Item: product3
+Amount: 160
