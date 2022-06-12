@@ -416,8 +416,7 @@ void print_avail_opt_adress_book(){
     printf("2) Print your adress book\n");
     printf("3) Save current adress\n");
     printf("4) Add new adress\n");
-    printf("4) Remove adress\n");
-    printf("6) Exit\n");
+    printf("5) Exit\n");
 }
 
 void save_ll(FILE * book_file, char DATA_ARRAY[MAX_SIZE_OF_ARRAYS][MAX_SIZE_OF_ARRAYS], char file_path[MAX_SIZE_OF_PATH_TO_FILES]){
@@ -571,9 +570,7 @@ void work_with_adress_book(LinkedList *ll){
                         save_ll(adress_book_file, ADRESS_BOOK_ARRAY, ADRESS_BOOK);
                     }
                 break;
-            case 5: 
-                break;
-            case 6: printf("Auto save is set to %d\n", auto_save);
+            case 5: printf("Auto save is set to %d\n", auto_save);
                     if(auto_save == true){
                         save_ll(adress_book_file, ADRESS_BOOK_ARRAY, ADRESS_BOOK);
                     }
