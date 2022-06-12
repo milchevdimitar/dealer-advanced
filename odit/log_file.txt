@@ -236,3 +236,30 @@ Item: product2
 Amount: 115
 Item: product3
 Amount: 160
+Inventory at 12.06.2022 - 13:51:09
+Item: product1
+Amount: 86
+Item: product2
+Amount: 115
+Item: product3
+Amount: 160
+Item: exp
+Amount: 1000
+Inventory at 12.06.2022 - 13:51:07
+Item: product1
+Amount: 86
+Item: product2
+Amount: 115
+Item: product3
+Amount: 160
+Item: exp
+Amount: 1000
+Inventory at 12.06.2022 - 13:51:07
+Item: product1
+Amount: 86
+Item: product2
+Amount: 115
+Item: product3
+Amount: 160
+Item: exp
+Amount: 1000

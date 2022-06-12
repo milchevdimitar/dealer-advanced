@@ -13,18 +13,20 @@
 #define MAX_SIZE_OF_STRINGS 15
 
 #define MONEY_AT_BEG_INT 1000
+#define MINIMUM_PROFIT_PERC 10 // 0 < MINIMUM_PROFIT_PERC < 15
 #define FUCK_PRICE 100
+#define DEALER_DISC 20
 
 //Defining file names
 #define ODIT         "odit/log_file.txt"
 #define SALES_D		 "odit/diary.txt"
-#define INVENTORY_N  "base/inventory_names.txt"
-#define INVENTORY_A  "base/inventory_amount.txt"
-#define INVENTORY_P  "base/inventory_prices.txt"
+#define INVENTORY_N  "base/inv/inventory_names.txt"
+#define INVENTORY_A  "base/inv/inventory_amount.txt"
+#define INVENTORY_P  "base/inv/inventory_prices.txt"
 #define DEALER_L     "base/about_dealer.txt"
-#define ADRESS_BOOK  "external/adress_book.txt"
-#define CLIENTS_BOOK "external/clients_book.txt"
-#define CLIENTS_DISC "external/clients_disc.txt"
+#define ADRESS_BOOK  "external/adr/adress_book.txt"
+#define CLIENTS_BOOK "external/cli/clients_book.txt"
+#define CLIENTS_DISC "external/cli/clients_disc.txt"
 
 //Defining settings
 bool auto_save = true;
@@ -34,14 +36,18 @@ bool money_at_beg = true;
 bool end_save = false; //dangerous
 
 //Global arrays - cache arrays
+
 static intmax_t INVENTORY_AMOUNT_ARRAY[MAX_SIZE_OF_ARRAYS];
 static intmax_t INVENTORY_PRICES_ARRAY[MAX_SIZE_OF_ARRAYS];
-static char INVENTORY_NAMES_ARRAY[MAX_SIZE_OF_ARRAYS][MAX_SIZE_OF_ARRAYS];
-static char ADRESS_BOOK_ARRAY[MAX_SIZE_OF_ARRAYS][MAX_SIZE_OF_ARRAYS];
+static char     INVENTORY_NAMES_ARRAY[MAX_SIZE_OF_ARRAYS][MAX_SIZE_OF_ARRAYS];
+
+static char     ADRESS_BOOK_ARRAY[MAX_SIZE_OF_ARRAYS][MAX_SIZE_OF_ARRAYS];
 static intmax_t ADRESS_MEETUP_HOURS[MAX_SIZE_OF_ARRAYS];
 static intmax_t ADRESS_MEETUP_MINS[MAX_SIZE_OF_ARRAYS];
-static char CLIENTS_BOOK_ARRAY[MAX_SIZE_OF_ARRAYS][MAX_SIZE_OF_ARRAYS];
+
+static char     CLIENTS_BOOK_ARRAY[MAX_SIZE_OF_ARRAYS][MAX_SIZE_OF_ARRAYS];
 static intmax_t CLIENTS_DISCOUNTS[MAX_SIZE_OF_ARRAYS];
+
 
 //Dealer
 struct dealer{
@@ -204,10 +210,15 @@ void get_clidisc_int(){
     token = strtok(help, ",");
     i = 0;
     while(token != NULL){
-        CLIENTS_DISCOUNTS[i] = atoi(token);
+        if(atoi(token) <= MINIMUM_PROFIT_PERC){
+            CLIENTS_DISCOUNTS[i] = MINIMUM_PROFIT_PERC;
+        } else {
+            CLIENTS_DISCOUNTS[i] = atoi(token);
+        }
         token = strtok(NULL, ",");
         i++;
     }
+
     n = i;
     fclose(InputFile);
 }
@@ -405,7 +416,8 @@ void print_avail_opt_adress_book(){
     printf("2) Print your adress book\n");
     printf("3) Save current adress\n");
     printf("4) Add new adress\n");
-    printf("5) Exit\n");
+    printf("4) Remove adress\n");
+    printf("6) Exit\n");
 }
 
 void save_ll(FILE * book_file, char DATA_ARRAY[MAX_SIZE_OF_ARRAYS][MAX_SIZE_OF_ARRAYS], char file_path[MAX_SIZE_OF_PATH_TO_FILES]){
@@ -559,7 +571,9 @@ void work_with_adress_book(LinkedList *ll){
                         save_ll(adress_book_file, ADRESS_BOOK_ARRAY, ADRESS_BOOK);
                     }
                 break;
-            case 5: printf("Auto save is set to %d\n", auto_save);
+            case 5: 
+                break;
+            case 6: printf("Auto save is set to %d\n", auto_save);
                     if(auto_save == true){
                         save_ll(adress_book_file, ADRESS_BOOK_ARRAY, ADRESS_BOOK);
                     }
@@ -579,8 +593,9 @@ void print_avail_opt_inventory(){
     printf("6) Real restock\n");
     printf("7) Sale\n");
 	printf("8) Add new product\n");
-    printf("9) Test - for debug\n");
-    printf("10) Exit\n");
+    printf("9) Remove product\n");
+    printf("10) Test - for debug\n");
+    printf("11) Exit\n");
 }
 
 void free_restock(){
@@ -618,7 +633,8 @@ void restock(){
         if(strcmp(temp_string_for_name, INVENTORY_NAMES_ARRAY[i]) == 0){
             if(temp_val_for_restock*INVENTORY_PRICES_ARRAY[i] < my_og.money){
                 INVENTORY_AMOUNT_ARRAY[i] += temp_val_for_restock;
-				my_og.money -= temp_val_for_restock * INVENTORY_PRICES_ARRAY[i];
+				my_og.money -= (temp_val_for_restock * INVENTORY_PRICES_ARRAY[i]) -
+                (DEALER_DISC*(temp_val_for_restock * INVENTORY_PRICES_ARRAY[i]))/100;
 				printf("Now u have %d from %s and %d in cash\n", INVENTORY_AMOUNT_ARRAY[i], INVENTORY_NAMES_ARRAY[i], my_og.money);
             break;
             } else {
@@ -636,27 +652,24 @@ void dealer__save(){
     printf("Infile info about dealer correctly overwritten\n");
 }
 
+void dealer__check(){
+    printf("Name: %s | Money: %d$\n", my_og.name, my_og.money);
+    printf("Startup money set to %d\n", money_at_beg);
+    dealer__save();
+}
+
 void dealer__init(){
     my_og.name = calloc(MAX_SIZE_OF_STRINGS, sizeof(const char));
     FILE * dealer = fopen(DEALER_L, "r");
     fscanf(dealer, "%d  %d  %255s", &my_og.money, &my_og.check_ok, my_og.name);
-    printf("%s\n", my_og.name);
-    printf("%d\n", my_og.money);
-    printf("%d\n", my_og.check_ok);
-    
+    dealer__check();
+
     if(money_at_beg == true && my_og.check_ok == 0){
         my_og.money = MONEY_AT_BEG_INT;
         my_og.check_ok = 1;
         dealer__save();
     }
-    printf("My name is set to: %s", my_og.name);
     fclose(dealer);
-}
-
-void dealer__check(){
-    printf("Name: %s | Money: %d$\n", my_og.name, my_og.money);
-    printf("Startup money set to %d\n", money_at_beg);
-    dealer__save();
 }
 
 void dealer__moneypowerup(){
@@ -726,8 +739,8 @@ int sale(){
                 for(j = 0; strlen(CLIENTS_BOOK_ARRAY[j]) != 0; j++){
                     if(strcmp(CLIENTS_BOOK_ARRAY[j], temp_string_for_cliname) == 0){
                         ovr_price = INVENTORY_PRICES_ARRAY[i];
-                        ovr_price += (INVENTORY_PRICES_ARRAY[i] * CLIENTS_DISCOUNTS[j]) / 100;
-                        profit = ovr_price - INVENTORY_PRICES_ARRAY[i];
+                        ovr_price -= (INVENTORY_PRICES_ARRAY[i] * CLIENTS_DISCOUNTS[j]) / 100;
+                        profit = INVENTORY_PRICES_ARRAY[i] - ovr_price;
                     }         
                 }
     			
@@ -769,6 +782,40 @@ void cache_add_product(){
     scanf("%d", &INVENTORY_PRICES_ARRAY[i]);
     printf("How much is available in stock:");
     scanf("%d", &INVENTORY_AMOUNT_ARRAY[i]);
+}
+
+void cache_remove_product(void) {
+    int i, j;
+    getchar();
+    printf("Enter the product's name u want to remove:");
+    char temp_string_for_prname[MAX_SIZE_OF_STRINGS + 1];
+    if (!fgets(temp_string_for_prname, sizeof temp_string_for_prname, stdin)){
+        return;
+    }
+
+    size_t len = strlen(temp_string_for_prname);
+    
+    if (len > 0 && temp_string_for_prname[len - 1] == '\n'){
+        temp_string_for_prname[--len] = '\0';
+    }
+    if (len == 0){
+        return;
+    }
+    for (i = 0; INVENTORY_NAMES_ARRAY[i][0] != '\0';) {
+        if (strcmp(temp_string_for_prname, INVENTORY_NAMES_ARRAY[i]) == 0) {
+            for (j = i; j < MAX_SIZE_OF_ARRAYS - 1; j++) {
+                strcpy(INVENTORY_NAMES_ARRAY[j], INVENTORY_NAMES_ARRAY[j + 1]);
+                INVENTORY_PRICES_ARRAY[j] = INVENTORY_PRICES_ARRAY[j + 1];
+                INVENTORY_AMOUNT_ARRAY[j] = INVENTORY_AMOUNT_ARRAY[j + 1];
+                if (INVENTORY_NAMES_ARRAY[j][0] == '\0'){
+                    break;
+                }
+            }
+            INVENTORY_NAMES_ARRAY[j][0] = '\0';
+        } else {
+            i++;
+        }
+    }
 }
 
 void work_with_inventory(){
@@ -819,9 +866,11 @@ void work_with_inventory(){
 				break;
             case 8: cache_add_product();
                 break;
-            case 9: test();
+            case 9: cache_remove_product();
                 break;
-            case 10: looping = false;
+            case 10: test();
+                break;
+            case 11: looping = false;
                 break;
         }
     }
